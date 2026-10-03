@@ -7,7 +7,7 @@ const ctx = canvas.getContext("2d");
 var v = 40
 
 function init() {
-    createSquare(3)
+    createSquare(Math.floor(Math.random() * 20))
     console.log(squares)
     window.requestAnimationFrame(draw);
 }
@@ -32,7 +32,7 @@ function createSquare(createlimit) {
             x: Math.floor(Math.random() * canvas.width),
             y: Math.floor(Math.random() * canvas.height),
             color: colors[Math.floor(Math.random() * 6)],
-            size: Math.floor(Math.random() * 75) + 10,
+            size: Math.floor(Math.random() * 100) + 10,
             vx: 10,
             vy: 10,
             draw() {
@@ -63,18 +63,28 @@ function draw() {
         if (element.y + element.cy > canvas.height - element.size||
             element.y < 0) {
                 element.cy = -element.cy;
-            }
+        };
         if (element.x + element.cx > canvas.width - element.size ||
             element.x < 0) {
                 element.cx = -element.cx;
-            }
+        };
+        
+        // var dx = element.x - mouseX;
+        // var dy = element.x - mouseY;
+
+        // element.vx -= dx * cx
+        // element.vy -= dy * cy
 
     });
-
-
-
     window.requestAnimationFrame(draw);
-
 }
+canvas.addEventListener("mousemove", (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    // console.log(`${mouseX}, ${mouseY}`)
+})
+
 
   init()
