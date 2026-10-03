@@ -5,28 +5,37 @@ canvas.height = window.innerHeight;
 const ctx = canvas.getContext("2d");
 
 ctx.fillStyle = "#4f4fa0"; 
-ctx.fillRect(0, 0, canvas.width, canvas.height);
 var v = 40
 
 function init() {
     window.requestAnimationFrame(draw);
 }
+const square = {
+    x: canvas.width / 2,
+    y: canvas.height / 2,
+    size: 50,
+    vx: 10,
+    vy: 5,
+    color: "blue",
+    draw() {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.size, this.size)
+    }
+}
+
+    square.x = canvas.width / 2 - square.size / 2;
+    square.y = canvas.height / 2 - square.size / 2;
+
 function draw() {
-    // // square
-    var size = 100;
-    var x = canvas.width / 2 - size / 2;
-    var y = canvas.height / 2 - size / 2;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = "#039545";
-    ctx.fillRect(x, y, size , size);
-    ctx.restore()
+    square.draw();
     
-    x +=v
-    y +=v
-    ctx.fillRect(x, y, size , size);
-    ctx.save()
+    square.x += (square.vx - (Math.random() * 10))
+    square.y += (square.vy - (Math.random() * 10))
 
-  window.requestAnimationFrame(draw);
+    
+    ref = window.requestAnimationFrame(draw);
 
 }
 //   ctx.clearRect(45, 45, 60, 60);
