@@ -13,18 +13,8 @@ function init() {
 }
 const colors = ["blue", "red", "green", "pink", "black", "yellow"]
 var squares = []
-// const square = {
-//     x: canvas.width / 2,
-//     y: canvas.height / 2,
-//     size: 50,
-//     vx: 10,
-//     vy: 5,
-//     color: colors[Math.floor(Math.random() * 6)],
-
-// }
-
-    // square.x = canvas.width / 2 - square.size / 2;
-    // square.y = canvas.height / 2 - square.size / 2;
+var mouseX
+var mouseY
 
 function createSquare(createlimit) {
     for (let i = 0; i <= createlimit; i++) {
@@ -56,8 +46,24 @@ function draw() {
         var cx = (canvas.width / 2 - element.size / 2) - element.x;
         var cy = (canvas.height / 2 - element.size / 2) - element.y;
 
+        var dx = mouseX - element.x;
+        var dy = mouseY - element.y;
+
+        var distance = Math.sqrt(dx * dx + dy * dy)
+
+        // element.vx -= dx
+        // element.vy -= dy
+
         element.x += cx * 0.01;
         element.y += cy * 0.01;
+
+        if (distance < 175) {
+            var s = 175 - distance
+            element.x += - dx * s * 0.01
+            element.y += - dy * s * 0.01
+        }
+        
+
 
         // boundries
         if (element.y + element.cy > canvas.height - element.size||
@@ -69,19 +75,14 @@ function draw() {
                 element.cx = -element.cx;
         };
         
-        // var dx = element.x - mouseX;
-        // var dy = element.x - mouseY;
-
-        // element.vx -= dx * cx
-        // element.vy -= dy * cy
 
     });
     window.requestAnimationFrame(draw);
 }
 canvas.addEventListener("mousemove", (e) => {
     const rect = canvas.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
+    mouseX = e.clientX - rect.left;
+    mouseY = e.clientY - rect.top;
 
     // console.log(`${mouseX}, ${mouseY}`)
 })
