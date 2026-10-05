@@ -2,9 +2,7 @@
   <head>
     <meta charset="utf-8">
     <style>
-      /* We remove margins and hide overflow to make the canvas fill the entire screen */
       html, body { margin: 0; height: 100%; overflow: hidden; }
-      /* We set the canvas to block display and take up 100% of the viewport width and height */
       canvas { display: block; width: 100vw; height: 100vh; }
       /* html {
             image-rendering: pixelated;
@@ -12,9 +10,7 @@
     </style>
   </head>
   <body>
-    <!-- The canvas tag is allowed! We give it an ID so we can reference it in JS -->
     <canvas id="app"></canvas>
-    <!-- Load our JavaScript file as a module -->
     <script type="module" src="./main.js"></script>
   </body>
 </html>

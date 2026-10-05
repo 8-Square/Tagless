@@ -28,8 +28,8 @@ function createSquare(createlimit) {
             y: Math.floor(Math.random() * canvas.height),
             color: colors[Math.floor(Math.random() * 6)],
             size: Math.floor(Math.random() * 100) + 10,
-            vx: 10,
-            vy: 10,
+            vx: Math.floor(Math.random() * 20 + 5),
+            vy: Math.floor(Math.random() * 20 + 5),
             draw() {
                 ctx.fillStyle = this.color;
                 ctx.fillRect(this.x, this.y, this.size, this.size);
@@ -40,17 +40,29 @@ function createSquare(createlimit) {
 }
 
 function draw() {
-    if (gameOver == true) {
+    if (gameOver) {
         window.cancelAnimationFrame(raf)
-        return 
+        return false
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        ctx.fillStyle = "#9e9edb"; 
+    ctx.fillStyle = "#9e9edb"; 
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    squares.forEach(element => {
+    // "death" zone
+    ctx.fillStyle = "#0000"
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, canvas.height / 2, 60, 0, Math.PI * 2)
+    // ctx.strokeRect(canvas.width / 2, canvas.height / 2, 60, 60)
+    ctx.stroke();
+
+    for (const element of squares) {
+        // Draws element
         element.draw()
+
+        if (gameOver) {
+            continue;
+        }
         
         var cx = (canvas.width / 2 - element.size / 2) - element.x;
         var cy = (canvas.height / 2 - element.size / 2) - element.y;
@@ -68,38 +80,39 @@ function draw() {
         element.y += cy * 0.01;
 
         // repulse the squares based off the distance
-        if (distance < 125) {
-            var s = 125 - distance;
+        if (distance < 135) {
+            var s = 135 - distance;
             element.x += - dx * s * 0.01;
             element.y += - dy * s * 0.01;
         }
         
         // if a square is in the center, trigger the lose sequence
-        if (centerDistance < 30) {
-            gameOver = true
+        if (centerDistance < 60) {
+            gameOver = true;
             window.cancelAnimationFrame(raf);
-            Lose()
-
+            Lose();
         }
-        
 
-    });
+    };
+
+    
     raf = window.requestAnimationFrame(draw);
 }
 
 function Lose() {
     // opaque rectangle
-    ctx.fillStyle = "#44455b27";
+    ctx.fillStyle = "#44455bae";
     ctx.fillRect(canvas.width / 2 - canvas.width / 8, canvas.height / 2 - canvas.height / 8, canvas.width / 4, canvas.height / 4 + 30);
 
     // you lose message
-    ctx.font = "bold 36px comic-sans";
+    ctx.font = "bold 36px sans-serif";
     ctx.fillStyle = "#e5ef35";
     ctx.textAlign = "center";
     ctx.fillText("You Lose", canvas.width / 2, canvas.height / 2)
 
-    ctx.font = "bold 24px comic-sans";
-    ctx.fillText("Click below to restart", canvas.width / 2, canvas.height / 2 + 36)
+    ctx.font = "bold 24px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("Click in the box to restart", canvas.width / 2, canvas.height / 2 + 36)
 
 }
 
