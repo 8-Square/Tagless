@@ -30,11 +30,13 @@ function createSquare(createlimit) {
             y: Math.floor(Math.random() * canvas.height),
             color: colors[Math.floor(Math.random() * 6)],
             size: Math.floor(Math.random() * 100) + 10,
-            vx: Math.floor(Math.random() * 20 + 5),
-            vy: Math.floor(Math.random() * 20 + 5),
+            vx: Math.floor(Math.random() * 30) + 5,
+            vy: Math.floor(Math.random() * 30) + 5,
+            sw: Math.floor(Math.random() * 9) + 1,
             draw() {
-                ctx.fillStyle = this.color;
-                ctx.fillRect(this.x, this.y, this.size, this.size);
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = this.sw
+                ctx.strokeRect(this.x, this.y, this.size, this.size);
             }
         }
         squares.push(Square);
@@ -52,9 +54,10 @@ function draw() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // "death" zone
-    ctx.fillStyle = "#0000"
+    ctx.strokeStyle = "#151313e6"
+    ctx.lineWidth = 3
     ctx.beginPath();
-    ctx.arc(canvas.width / 2, canvas.height / 2, 60, 0, Math.PI * 2)
+    ctx.arc(canvas.width / 2, canvas.height / 2, 100, 0, Math.PI * 2)
     // ctx.strokeRect(canvas.width / 2, canvas.height / 2, 60, 60)
     ctx.stroke();
 
@@ -87,7 +90,7 @@ function draw() {
         }
         
         // if a square is in the center, trigger the lose sequence
-        if (centerDistance < 60) {
+        if (centerDistance < 100) {
             gameOver = true;
         }
 
