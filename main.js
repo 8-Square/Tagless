@@ -16,6 +16,8 @@ var squares = [];
 
 var mouseX;
 var mouseY;
+var clickX;
+var clickY;
 
 var gameOver = false
 var raf;
@@ -42,7 +44,7 @@ function createSquare(createlimit) {
 function draw() {
     if (gameOver) {
         window.cancelAnimationFrame(raf)
-        return false
+        return;
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -57,12 +59,10 @@ function draw() {
     ctx.stroke();
 
     for (const element of squares) {
+
         // Draws element
         element.draw()
 
-        if (gameOver) {
-            continue;
-        }
         
         var cx = (canvas.width / 2 - element.size / 2) - element.x;
         var cy = (canvas.height / 2 - element.size / 2) - element.y;
@@ -89,13 +89,16 @@ function draw() {
         // if a square is in the center, trigger the lose sequence
         if (centerDistance < 60) {
             gameOver = true;
-            window.cancelAnimationFrame(raf);
-            Lose();
         }
 
     };
 
-    
+    if (gameOver) {
+        window.cancelAnimationFrame(raf);
+        Lose();
+        return;
+
+    }
     raf = window.requestAnimationFrame(draw);
 }
 
@@ -115,6 +118,13 @@ function Lose() {
     ctx.fillText("Click in the box to restart", canvas.width / 2, canvas.height / 2 + 36)
 
 }
+function restart() {
+    squares = []
+    createSquare(Math.floor(Math.random() * 20));
+    gameOver = false
+    raf = window.requestAnimationFrame(draw);
+}
+
 
 canvas.addEventListener("mousemove", (e) => {
     // window.requestAnimationFrame(draw);
@@ -138,4 +148,29 @@ canvas.addEventListener("mouseenter", (e) => {
         gamePlaying = true
     }
 })
+
+canvas.addEventListener("click", (e) => {
+    if (!gameOver) {
+        return;
+    }
+
+    const rect = canvas.getBoundingClientRect();
+    clickX = e.clientX - rect.left;
+    clickY = e.clientY - rect.top;
+
+    // get dimensions of rect
+
+    // ctx.fillRect(canvas.width / 2 - canvas.width / 8, canvas.height / 2 - canvas.height / 8, canvas.width / 4, canvas.height / 4 + 30);
+    var rectX = canvas.width / 2 - canvas.width / 8
+    var rectY = canvas.height / 2 - canvas.height / 8
+    var rectW =  canvas.width / 4
+    var rectH = canvas.height / 4 + 30
+
+    if (clickX > rectX && clickX < rectX + rectW && clickY > rectY && clickY < rectY + rectH) {
+        restart();
+        console.log("RESTARTED")
+    }
+});
+
+
   init()
